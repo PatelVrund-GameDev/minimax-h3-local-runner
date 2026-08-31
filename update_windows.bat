@@ -5,7 +5,7 @@ title MiniMax H3 Local Runner - 1-Click Updater
 cd /d "%~dp0"
 
 echo ==============================================================================
-echo           MINIMAX H3 LOCAL RUNNER & WAN2GP - 1-CLICK UPDATER
+echo           MINIMAX H3 LOCAL RUNNER AND WAN2GP - 1-CLICK UPDATER
 echo ==============================================================================
 echo.
 

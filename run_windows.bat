@@ -1,11 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
-title MiniMax H3 & Wan2GP Local Runner
+title MiniMax H3 and Wan2GP Local Runner
 
 cd /d "%~dp0"
 
 echo ==============================================================================
-echo              MINIMAX H3 & WAN2GP - LOCAL STUDIO RUNNER
+echo              MINIMAX H3 AND WAN2GP - LOCAL STUDIO RUNNER
 echo ==============================================================================
 echo.
 
@@ -17,7 +17,7 @@ if not exist ".venv\Scripts\python.exe" (
     exit /b 1
 )
 
-:: Set Cache & Temporary Paths to local directory on D: drive (prevents C: disk full)
+:: Set Cache and Temporary Paths to local directory on D: drive (prevents C: disk full)
 set "BASE_DIR=%~dp0"
 set "HF_HOME=%BASE_DIR%hf_cache"
 set "TORCH_HOME=%BASE_DIR%torch_cache"
@@ -31,16 +31,16 @@ if not exist "%TMPDIR%" mkdir "%TMPDIR%"
 if not exist "%BASE_DIR%wan2gp_core\ckpts" mkdir "%BASE_DIR%wan2gp_core\ckpts"
 if not exist "%BASE_DIR%outputs" mkdir "%BASE_DIR%outputs"
 
-:: GPU Memory & CUDA Allocator Optimization
+:: GPU Memory and CUDA Allocator Optimization
 set "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
 set "CUDA_MODULE_LOADING=LAZY"
 
-echo [*] Model & Cache Path: %HF_HOME%
-echo [*] Temporary Path:      %TMPDIR%
+echo [*] Cache Directory:  %HF_HOME%
+echo [*] Temporary Path:   %TMPDIR%
 echo.
-echo [*] Initializing Wan2GP engine & GPU acceleration kernels...
+echo [*] Initializing Wan2GP engine and GPU acceleration kernels...
 echo [*] The server is starting. Your browser will automatically open to:
-echo     >> http://127.0.0.1:7860
+echo     http://127.0.0.1:7860
 echo ==============================================================================
 echo.
 

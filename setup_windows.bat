@@ -1,11 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
-title MiniMax H3 / Wan2GP 1-Click Installer (Windows)
+title MiniMax H3 and Wan2GP 1-Click Installer (Windows)
 
 cd /d "%~dp0"
 
 echo ==============================================================================
-echo            MINIMAX H3 & WAN2GP - 1-CLICK WINDOWS SETUP
+echo            MINIMAX H3 AND WAN2GP - 1-CLICK WINDOWS SETUP
 echo ==============================================================================
 echo.
 
@@ -79,7 +79,7 @@ if "!USE_UV!"=="1" (
     "!VENV_PY!" -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 )
 
-:: 6. Install Triton & SageAttention for RTX 30/40/50 Series
+:: 6. Install Triton and SageAttention for RTX 30/40/50 Series
 echo.
 echo ==============================================================================
 echo [*] Installing Acceleration Kernels (Triton Windows + SageAttention 2)...
