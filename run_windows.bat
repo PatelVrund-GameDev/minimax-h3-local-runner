@@ -1,11 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
-title MiniMax H3 Local Video Agent Launcher
+title MiniMax H3 & Wan2GP Local Runner
 
 cd /d "%~dp0"
 
 echo ==============================================================================
-echo              MINIMAX H3 LOCAL VIDEO AGENT - RUNNER
+echo              MINIMAX H3 & WAN2GP - LOCAL STUDIO RUNNER
 echo ==============================================================================
 echo.
 
@@ -35,13 +35,17 @@ if not exist "%BASE_DIR%outputs" mkdir "%BASE_DIR%outputs"
 set "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
 set "CUDA_MODULE_LOADING=LAZY"
 
-echo [*] Cache Directory:  %HF_HOME%
-echo [*] Temporary Path:   %TMPDIR%
-echo [*] Python Executable: %BASE_DIR%.venv\Scripts\python.exe
+echo [*] Model & Cache Path: %HF_HOME%
+echo [*] Temporary Path:      %TMPDIR%
 echo.
-echo [*] Starting Wan2GP with MiniMax H3 support...
-echo [*] Web UI will open in your browser at http://127.0.0.1:7860
+echo [*] Initializing Wan2GP engine & GPU acceleration kernels...
+echo [*] The server is starting. Your browser will automatically open to:
+echo     >> http://127.0.0.1:7860
+echo ==============================================================================
 echo.
+
+:: Launch background watcher to automatically open browser once the web server is ready
+start /b powershell -NoProfile -ExecutionPolicy Bypass -Command "$port = 7860; $maxWait = 120; $elapsed = 0; while ($elapsed -lt $maxWait) { try { $client = New-Object System.Net.Sockets.TcpClient('127.0.0.1', $port); if ($client.Connected) { $client.Close(); Start-Process 'http://127.0.0.1:7860'; break } } catch { Start-Sleep -Seconds 1; $elapsed++ } }"
 
 cd /d "%BASE_DIR%wan2gp_core"
 "%BASE_DIR%.venv\Scripts\python.exe" wgp.py %*
