@@ -14,7 +14,7 @@ where nvidia-smi >nul 2>nul
 if %errorlevel% neq 0 (
     echo [!] WARNING: nvidia-smi not found. Ensure you have an NVIDIA GPU and drivers installed.
 ) else (
-    echo [✓] NVIDIA GPU detected:
+    echo [OK] NVIDIA GPU detected:
     nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 )
 echo.
@@ -24,7 +24,7 @@ set "USE_UV=0"
 where uv >nul 2>nul
 if %errorlevel% equ 0 (
     set "USE_UV=1"
-    echo [✓] Found 'uv' package manager. Using fast uv environment creation.
+    echo [OK] Found 'uv' package manager. Using fast uv environment creation.
     if not exist ".venv" (
         echo [*] Creating Python 3.11 virtual environment with uv...
         uv venv --python 3.11 .venv
@@ -46,7 +46,7 @@ if not exist ".venv\Scripts\python.exe" (
 set "VENV_PY=%~dp0.venv\Scripts\python.exe"
 set "VENV_PIP=%~dp0.venv\Scripts\pip.exe"
 
-echo [✓] Virtual environment ready: !VENV_PY!
+echo [OK] Virtual environment ready: !VENV_PY!
 echo.
 
 :: 3. Set temporary cache paths to local drive
@@ -98,7 +98,7 @@ if "!USE_UV!"=="1" (
 
 echo.
 echo ==============================================================================
-echo [✓] SETUP COMPLETED SUCCESSFULLY!
+echo [OK] SETUP COMPLETED SUCCESSFULLY!
 echo ==============================================================================
 echo Next Steps:
 echo   1. Run 'download_models.bat' to download MiniMax H3 model weights.
