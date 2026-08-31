@@ -31,8 +31,7 @@ if not exist "%TMPDIR%" mkdir "%TMPDIR%"
 if not exist "%BASE_DIR%wan2gp_core\ckpts" mkdir "%BASE_DIR%wan2gp_core\ckpts"
 if not exist "%BASE_DIR%outputs" mkdir "%BASE_DIR%outputs"
 
-:: GPU Memory and CUDA Allocator Optimization
-set "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+:: GPU Memory Optimization
 set "CUDA_MODULE_LOADING=LAZY"
 
 echo [*] Cache Directory:  %HF_HOME%
