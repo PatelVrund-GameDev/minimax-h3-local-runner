@@ -348,6 +348,11 @@ def run_downloader(preset_name: str, base_dir: Path, hf_token: str = None, dry_r
 
         try:
             download_file(url, dest_file, hf_token=hf_token)
+            if item.get("category") == "text_encoder":
+                qwen_dir = base_dir / "ckpts" / "Qwen3-VL-32B-Instruct"
+                for aux_file in ["config.json", "tokenizer.json", "tokenizer_config.json", "preprocessor_config.json", "vocab.json"]:
+                    aux_url = urljoin(HF_BASE_URL, f"Qwen3-VL-32B-Instruct/{aux_file}")
+                    download_file(aux_url, qwen_dir / aux_file, hf_token=hf_token)
         except Exception as err:
             print(f"[!] Failed downloading {item['subpath']}: {err}")
             return False
