@@ -33,6 +33,7 @@ if not exist "%BASE_DIR%outputs" mkdir "%BASE_DIR%outputs"
 
 :: GPU Memory Optimization
 set "CUDA_MODULE_LOADING=LAZY"
+set "perc_reserved_mem_max=0.75"
 
 echo [*] Cache Directory:  %HF_HOME%
 echo [*] Temporary Path:   %TMPDIR%
