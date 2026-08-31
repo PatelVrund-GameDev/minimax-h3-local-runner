@@ -19,7 +19,16 @@ if %errorlevel% neq 0 (
 )
 echo.
 
-:: 2. Setup Python Environment (.venv) using uv or python
+:: 2. Check or Clone Wan2GP Core Engine
+if not exist "wan2gp_core" (
+    echo [*] Cloning official Wan2GP core engine from upstream...
+    git clone https://github.com/deepbeepmeep/Wan2GP.git wan2gp_core
+) else (
+    echo [OK] Wan2GP core engine directory found.
+)
+echo.
+
+:: 3. Setup Python Environment (.venv) using uv or python
 set "USE_UV=0"
 where uv >nul 2>nul
 if %errorlevel% equ 0 (
@@ -49,7 +58,7 @@ set "VENV_PIP=%~dp0.venv\Scripts\pip.exe"
 echo [OK] Virtual environment ready: !VENV_PY!
 echo.
 
-:: 3. Set temporary cache paths to local drive
+:: 4. Set temporary cache paths to local drive
 set "HF_HOME=%~dp0hf_cache"
 set "TORCH_HOME=%~dp0torch_cache"
 set "TMPDIR=%~dp0tmp"
@@ -60,17 +69,17 @@ if not exist "wan2gp_core\ckpts" mkdir "wan2gp_core\ckpts"
 if not exist "wan2gp_core\loras\minimax_h3" mkdir "wan2gp_core\loras\minimax_h3"
 if not exist "outputs" mkdir "outputs"
 
-:: 4. Install PyTorch with CUDA support
+:: 5. Install PyTorch with CUDA support
 echo ==============================================================================
 echo [*] Installing PyTorch with CUDA acceleration...
 echo ==============================================================================
 if "!USE_UV!"=="1" (
-    uv pip install --python "%VENV_PY%" torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130
+    uv pip install --python "%VENV_PY%" torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 ) else (
-    "!VENV_PY!" -m pip install torch==2.10.0 torchvision==0.25.0 torchaudio==2.10.0 --index-url https://download.pytorch.org/whl/cu130
+    "!VENV_PY!" -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
 )
 
-:: 5. Install Triton & SageAttention for RTX 30/40/50 Series
+:: 6. Install Triton & SageAttention for RTX 30/40/50 Series
 echo.
 echo ==============================================================================
 echo [*] Installing Acceleration Kernels (Triton Windows + SageAttention 2)...
@@ -83,7 +92,7 @@ if "!USE_UV!"=="1" (
     "!VENV_PY!" -m pip install "https://github.com/woct0rdho/SageAttention/releases/download/v2.2.0-windows.post4/sageattention-2.2.0+cu130torch2.9.0andhigher.post4-cp39-abi3-win_amd64.whl"
 )
 
-:: 6. Install Core Requirements
+:: 7. Install Core Requirements
 echo.
 echo ==============================================================================
 echo [*] Installing Application Dependencies...

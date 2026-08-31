@@ -10,15 +10,23 @@ echo "==========================================================================
 
 # Check GPU
 if command -v nvidia-smi &> /dev/null; then
-    echo "[✓] NVIDIA GPU detected:"
+    echo "[OK] NVIDIA GPU detected:"
     nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 else
     echo "[!] WARNING: nvidia-smi not found. CUDA acceleration may not be available."
 fi
 
+# Clone Wan2GP Core Engine if not present
+if [ ! -d "wan2gp_core" ]; then
+    echo "[*] Cloning official Wan2GP core engine from upstream..."
+    git clone https://github.com/deepbeepmeep/Wan2GP.git wan2gp_core
+else
+    echo "[OK] Wan2GP core engine directory found."
+fi
+
 # Setup Python environment
 if command -v uv &> /dev/null; then
-    echo "[✓] Using uv package manager."
+    echo "[OK] Using uv package manager."
     if [ ! -d ".venv" ]; then
         uv venv --python 3.11 .venv
     fi
@@ -41,5 +49,5 @@ fi
 mkdir -p hf_cache torch_cache tmp wan2gp_core/ckpts wan2gp_core/loras/minimax_h3 outputs
 
 echo "=============================================================================="
-echo "[✓] Linux setup complete! Run ./run_linux.sh to launch."
+echo "[OK] Linux setup complete! Run ./run_linux.sh to launch."
 echo "=============================================================================="

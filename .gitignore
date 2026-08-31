@@ -24,17 +24,14 @@ __pycache__/
 *.engine
 
 # Directory weights & caches
-wan2gp_core/ckpts/*
-!wan2gp_core/ckpts/.gitkeep
+wan2gp_core/
 ckpts/
 models_cache/
 hf_cache/
 torch_cache/
 tmp/
-loras/*
+loras/
 !loras/.gitkeep
-wan2gp_core/loras/*
-!wan2gp_core/loras/.gitkeep
 
 # Generation Outputs
 outputs/
