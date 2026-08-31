@@ -273,18 +273,50 @@ python download_models.py
 
 ---
 
-## 🛠️ Troubleshooting & Memory FAQs
+## 🛠️ Comprehensive Troubleshooting & Memory Guide
 
-### 1. `CUDA out of memory` (OOM)
-* Switch from `One Phase` to `Two Phases with Tiling` under *Advanced Mode*.
-* Use the **Pruned INT8 ConvRot** model rather than unpruned BF16.
-* Ensure `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` is set (automatically handled by `run_windows.bat` and `run_linux.sh`).
+Here are the most common real-world errors, why they happen, and how to solve them:
 
-### 2. Downloads filling up the `C:` drive
-* The launcher scripts automatically route `HF_HOME`, `TORCH_HOME`, and `TMPDIR` to the project folder on your large storage drive.
+---
 
-### 3. Audio and video out of sync
-* Ensure the output frame rate is set to **24 FPS** (MiniMax H3's native training rate).
+### 1. `CUDA error: out of memory` during Text Encoder (`embed_tokens`)
+* **Why it happens**: MiniMax H3's default **Quanto INT8 Text Encoder (26.7 GB)** + **Video Diffusion Model (21.0 GB)** total ~48 GB of weights. If both models try to stay in memory at the exact same time, or if MMGP's default 40% RAM cap is active, it triggers an allocation crash during prompt token embedding.
+* **Solutions**:
+  * **Solution A (Recommended — Use Lightweight Text Encoder)**: Use the **GGUF Q4 Text Encoder** (`qwen3vl-32B-MiniMax-H3-Q4_K_M.gguf` ~14.0 GB) or **NVFP4 AWQ** (`~16.0 GB` for RTX 5080/4080). This cuts text encoder RAM usage in half!
+  * **Solution B (Sequential Memory Profile)**: In the Web UI, open the **`Configuration`** tab, change **Video Profile** from *Auto / 3* to **`Profile 4`** (or `4.5`), and click *Save Configuration*. This unloads the text encoder from VRAM before the diffusion model starts.
+  * **Solution C**: Ensure `run_windows.bat` is launched with `--perc-reserved-mem-max 0.75 --preload 0` (automatically pre-configured in our launcher).
+
+---
+
+### 2. High System RAM Usage (98%) & Spilling into "Shared GPU Memory" in Task Manager
+* **Why it happens**: On Windows 11, when a model exceeds physical VRAM or when System RAM is full from loading the unpruned 33B model (34 GB), the NVIDIA driver automatically redirects allocations into **Shared GPU Memory** (which pages to disk/RAM). When Shared GPU memory hits its 15.9 GB ceiling, CUDA crashes with OOM.
+* **Solutions**:
+  * **Switch to `FL2VA Pruned 20B`**: The pruned model is **21 GB** (instead of 34 GB), dropping System RAM usage from 98% down to ~50% and allowing your GPU to use 100% Dedicated VRAM.
+  * **Disable NVIDIA Sysmem Fallback**: Open **NVIDIA Control Panel** -> *Manage 3D Settings* -> *Global Settings* -> find **CUDA - Sysmem Fallback Policy** -> set to **"Prefer No Sysmem Fallback"**. This forces PyTorch to strictly utilize your graphics card's dedicated high-speed GDDR VRAM.
+
+---
+
+### 3. `Switching to partial pinning` / RAM Limits in Console
+* **Why it happens**: By default, Wan2GP only allocates 40% of physical RAM to MMGP model pinning. On a 32GB RAM PC, 40% is only 13 GB, which is not enough to pin the 20 GB model.
+* **Solution**: Launch with `set perc_reserved_mem_max=0.75` (automatically included in `run_windows.bat`), which raises the reservable RAM buffer to **24 GB** and enables **100% Full Pinning**.
+
+---
+
+### 4. Downloads Filling Up the Windows `C:` Drive
+* **Why it happens**: Default PyTorch and Hugging Face libraries write caches to `C:\Users\<user>\.cache`.
+* **Solution**: Our launcher scripts (`run_windows.bat` & `run_linux.sh`) automatically redirect `HF_HOME`, `TORCH_HOME`, and `TMPDIR` to the project directory on your large storage drive (e.g. Drive `D:`).
+
+---
+
+### 5. Two-Phase Latent Tiling Seams or Grid Artifacts
+* **Why it happens**: When generating in Two Phases with 4-Quadrant Tiling, setting the starting noise level too high can cause subtle boundary seams between quadrants.
+* **Solution**: Under *Advanced Mode -> General -> Switch Threshold*, lower **Phase 2 Noise Level Start** from `0.05` down to **`0.03`** for seamless quadrant blending.
+
+---
+
+### 6. Video and Audio Out of Sync
+* **Why it happens**: MiniMax H3's native training rate is **24 FPS**. Generating directly at 30 FPS or 60 FPS causes audio and video timing drift.
+* **Solution**: Always generate the base video at **24 FPS**. To get a smooth 60 FPS output, use the built-in **RIFE 2x / 4x** post-processing tab.
 
 ---
 
