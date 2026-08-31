@@ -58,6 +58,41 @@ chmod +x *.sh
 
 ---
 
+## 📂 Checkpoints & Expected File Locations
+
+If you use `download_models.bat` (or manually place files), here is the exact folder structure and expected file paths on disk:
+
+```text
+local-video-agent/
+ └── wan2gp_core/
+      ├── ckpts/
+      │    ├── MiniMax-H3-FL2VA-pruned_rank8_int8_convrot.safetensors   <-- Main Model (Pruned 20B INT8)
+      │    ├── MiniMax-H3-FL2VA_int8_convrot.safetensors               <-- Main Model (Full 33B INT8)
+      │    ├── MiniMax-H3-video_vae_fp16.safetensors                   <-- Video VAE
+      │    ├── MiniMax-H3-audio_vae_fp32.safetensors                   <-- Audio VAE
+      │    ├── minimax_h3/
+      │    │    └── minimax_h3_latent_upscaler_3d_bf16.safetensors     <-- 3D Latent Upscaler
+      │    └── Qwen3-VL-32B-Instruct/
+      │         ├── Qwen3-VL-32B-Instruct-layer50_quanto_bf16_int8.safetensors <-- Text Encoder (Quanto INT8)
+      │         ├── config.json
+      │         ├── tokenizer.json
+      │         ├── tokenizer_config.json
+      │         ├── preprocessor_config.json
+      │         └── vocab.json
+      └── loras/
+           └── minimax_h3/
+                ├── minimax_h3_lightx2v_fl2v_turbo_4step_alpha128_v1.0_768p_bf16.safetensors <-- 4-Step Turbo LoRA
+                └── minimax_h3_lightx2v_fl2v_turbo_8step_alpha8_v1.0_bf16.safetensors        <-- 8-Step Turbo LoRA
+```
+
+### 🔍 Understanding the Web UI "URLs" Tab:
+Inside the Web UI under the **URLs** tab:
+* **Main Checkpoints**: Displays the supported Hugging Face URLs for the selected model. When generating, Wan2GP automatically matches these filenames to your local files inside `wan2gp_core/ckpts/` and loads them directly from disk.
+* **Text Encoder Checkpoints**: Left **blank by default**. Leaving this empty tells Wan2GP to load the official built-in text encoder (`wan2gp_core/ckpts/Qwen3-VL-32B-Instruct/Qwen3-VL-32B-Instruct-layer50_quanto_bf16_int8.safetensors`). You can also manually paste custom paths or browse via the yellow folder icon.
+* **Video & Audio VAE File**: Left **blank by default** to use `MiniMax-H3-video_vae_fp16.safetensors` and `MiniMax-H3-audio_vae_fp32.safetensors`.
+
+---
+
 ## 🖥️ Universal Hardware & VRAM Guide
 
 MiniMax H3 and Wan2GP are built to scale dynamically from budget laptops to massive server clusters:
