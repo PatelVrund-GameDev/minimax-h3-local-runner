@@ -47,7 +47,7 @@ echo.
 start /b powershell -NoProfile -ExecutionPolicy Bypass -Command "$port = 7860; $maxWait = 120; $elapsed = 0; while ($elapsed -lt $maxWait) { try { $client = New-Object System.Net.Sockets.TcpClient('127.0.0.1', $port); if ($client.Connected) { $client.Close(); Start-Process 'http://127.0.0.1:7860'; break } } catch { Start-Sleep -Seconds 1; $elapsed++ } }"
 
 cd /d "%BASE_DIR%wan2gp_core"
-"%BASE_DIR%.venv\Scripts\python.exe" wgp.py %*
+"%BASE_DIR%.venv\Scripts\python.exe" wgp.py --perc-reserved-mem-max 0.75 --preload 0 %*
 
 if %errorlevel% neq 0 (
     echo.
