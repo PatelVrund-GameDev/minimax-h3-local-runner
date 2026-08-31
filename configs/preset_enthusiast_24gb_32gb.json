@@ -1,0 +1,28 @@
+{
+    "tier_name": "Enthusiast & Top-Tier GPUs (24GB - 32GB VRAM)",
+    "compatible_gpus": ["RTX 4090 (24G)", "RTX 3090 / 3090 Ti (24G)", "RTX 5090 (32G)"],
+    "target_resolution": "1920x1080 (1080p Native) / 2560x1440 (1440p 2-Phase)",
+    "recommended_configuration": {
+        "model_architecture": "minimax_h3_fl2va (Full 33B) or minimax_h3_fl2va_pruned",
+        "checkpoint": "MiniMax-H3-FL2VA_int8_convrot.safetensors or MiniMax-H3-FL2VA-pruned_rank8_bf16.safetensors",
+        "text_encoder": "Qwen3-VL-32B-Instruct/Qwen3-VL-32B-Instruct-layer50_quanto_bf16_int8.safetensors",
+        "video_vae": "MiniMax-H3-video_vae_fp16.safetensors",
+        "audio_vae": "MiniMax-H3-audio_vae_fp32.safetensors",
+        "turbo_lora": {
+            "enabled": true,
+            "file": "minimax_h3_lightx2v_fl2v_turbo_4step_alpha16_v0.1.safetensors",
+            "multiplier": 0.6
+        },
+        "inference_steps": 8,
+        "first_block_cache": {
+            "enabled": true,
+            "strength": "Low (0.06) or Balanced (0.08)"
+        },
+        "phases_mode": "One Phase (Direct 1080p)",
+        "sample_solver": "euler",
+        "fps": 24,
+        "duration_seconds": 15
+    },
+    "estimated_vram_gb": 18.5,
+    "notes": "Allows direct 1-phase native 1080p generation without tiling, delivering exceptional fine visual consistency."
+}

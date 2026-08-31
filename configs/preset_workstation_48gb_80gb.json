@@ -1,0 +1,28 @@
+{
+    "tier_name": "Workstation & Enterprise GPUs (48GB - 80GB+ VRAM)",
+    "compatible_gpus": ["RTX 6000 Ada (48G)", "A100 (80G)", "H100 (80G)", "B200", "L40S (48G)"],
+    "target_resolution": "1920x1080 (1080p) / 3840x2160 (4K)",
+    "recommended_configuration": {
+        "model_architecture": "minimax_h3_fl2va (Full 33B Unpruned)",
+        "checkpoint": "MiniMax-H3-FL2VA_bf16.safetensors",
+        "text_encoder": "Qwen3-VL-32B-Instruct/Qwen3-VL-32B-Instruct-layer50_bf16.safetensors",
+        "video_vae": "MiniMax-H3-video_vae_fp16.safetensors",
+        "audio_vae": "MiniMax-H3-audio_vae_fp32.safetensors",
+        "inference_steps": 20,
+        "sample_solver": "euler or ralston_2s",
+        "first_block_cache": {
+            "enabled": true,
+            "strength": "Low (0.06)"
+        },
+        "phases_mode": "One Phase (Native)",
+        "fps": 24,
+        "duration_seconds": 15,
+        "sliding_windows": {
+            "enabled": true,
+            "overlap_frames": 35,
+            "target_total_duration": "60s+"
+        }
+    },
+    "estimated_vram_gb": 38.0,
+    "notes": "Full precision uncompressed 33B model with Ralston 2S / Euler sampler for Hollywood-grade rendering quality."
+}

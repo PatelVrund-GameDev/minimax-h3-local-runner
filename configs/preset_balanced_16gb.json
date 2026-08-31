@@ -1,0 +1,31 @@
+{
+    "tier_name": "Mid-to-High Consumer GPUs (16GB VRAM)",
+    "compatible_gpus": ["RTX 5080 (16G)", "RTX 4080 / 4080 Super (16G)", "RTX 4070 Ti Super (16G)", "RTX 3080 (12G/16G)"],
+    "target_resolution": "1280x720 (720p Native) / 1920x1080 (1080p 2-Phase)",
+    "recommended_configuration": {
+        "model_architecture": "minimax_h3_fl2va_pruned",
+        "checkpoint": "MiniMax-H3-FL2VA-pruned_rank8_int8_convrot.safetensors",
+        "text_encoder": "Qwen3-VL-32B-Instruct/Qwen3-VL-32B-Instruct-layer50_quanto_bf16_int8.safetensors",
+        "video_vae": "MiniMax-H3-video_vae_fp16.safetensors",
+        "audio_vae": "MiniMax-H3-audio_vae_fp32.safetensors",
+        "latent_upscaler": "minimax_h3/minimax_h3_latent_upscaler_3d_bf16.safetensors",
+        "turbo_lora": {
+            "enabled": true,
+            "file": "minimax_h3_lightx2v_fl2v_turbo_4step_alpha16_v0.1.safetensors",
+            "multiplier": 0.6
+        },
+        "inference_steps": 6,
+        "first_block_cache": {
+            "enabled": true,
+            "strength": "Balanced (0.08)"
+        },
+        "attention_mode": "SageAttention 2 / Sol-Attn",
+        "phases_mode": "One Phase for 720p, Two Phases for 1080p",
+        "sample_solver": "euler",
+        "fps": 24,
+        "duration_seconds": 15,
+        "total_frames": 360
+    },
+    "estimated_vram_gb": 12.4,
+    "notes": "Sweet spot configuration. 720p 15s video generated in 2.5-4 minutes with pristine lip-sync and stereo audio."
+}

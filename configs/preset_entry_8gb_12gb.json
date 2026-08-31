@@ -1,0 +1,29 @@
+{
+    "tier_name": "Entry & Budget GPUs (8GB - 12GB VRAM)",
+    "compatible_gpus": ["RTX 3060 (12G)", "RTX 4060 Ti (16G)", "RTX 2080 Ti (11G)", "RTX 3070 (8G)"],
+    "target_resolution": "854x480 (480p) or 1280x720 with Tiling",
+    "recommended_configuration": {
+        "model_architecture": "minimax_h3_fl2va_pruned",
+        "checkpoint": "MiniMax-H3-FL2VA-pruned_rank8_int8_convrot.safetensors",
+        "text_encoder": "Qwen3-VL-32B-Instruct/qwen3vl-32B-MiniMax-H3-Q4_K_M.gguf",
+        "video_vae": "minimax_h3_video_vae_fp8mix.safetensors",
+        "audio_vae": "MiniMax-H3-audio_vae_fp32.safetensors",
+        "turbo_lora": {
+            "enabled": true,
+            "file": "minimax_h3_lightx2v_fl2v_turbo_4step_alpha16_v0.1.safetensors",
+            "multiplier": 0.55
+        },
+        "inference_steps": 6,
+        "first_block_cache": {
+            "enabled": true,
+            "strength": "Balanced (0.08)"
+        },
+        "phases_mode": "Two Phases with Tiling",
+        "phase_2_noise_start": 0.05,
+        "sample_solver": "euler",
+        "fps": 24,
+        "duration_seconds": 5
+    },
+    "estimated_vram_gb": 8.8,
+    "notes": "Using GGUF text encoder and FP8 mixed VAE keeps memory within budget. Two Phases with Tiling allows 720p without OOM."
+}

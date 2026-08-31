@@ -63,6 +63,12 @@ MODELS_CATALOG = {
         "category": "checkpoint",
         "approx_gb": 66.0,
     },
+    "text_encoder_bf16": {
+        "name": "Qwen3-VL-32B Instruct (Full BF16 Text Encoder - 48GB+ Workstations)",
+        "subpath": "Qwen3-VL-32B-Instruct/Qwen3-VL-32B-Instruct-layer50_bf16.safetensors",
+        "category": "text_encoder",
+        "approx_gb": 64.0,
+    },
     "text_encoder_int8": {
         "name": "Qwen3-VL-32B Instruct (Quanto INT8 Text Encoder - Recommended)",
         "subpath": "Qwen3-VL-32B-Instruct/Qwen3-VL-32B-Instruct-layer50_quanto_bf16_int8.safetensors",
@@ -70,7 +76,7 @@ MODELS_CATALOG = {
         "approx_gb": 16.5,
     },
     "text_encoder_gguf_q4": {
-        "name": "Qwen3-VL-32B Instruct (GGUF Q4_K_M)",
+        "name": "Qwen3-VL-32B Instruct (GGUF Q4_K_M - Low RAM)",
         "subpath": "Qwen3-VL-32B-Instruct/qwen3vl-32B-MiniMax-H3-Q4_K_M.gguf",
         "category": "text_encoder",
         "approx_gb": 18.0,
@@ -116,19 +122,8 @@ MODELS_CATALOG = {
 }
 
 PRESETS = {
-    "recommended": {
-        "description": "Recommended for 12GB - 16GB VRAM (RTX 5080 / 4080 / 4070 / 3080)",
-        "items": [
-            "fl2va_pruned_int8",
-            "text_encoder_int8",
-            "video_vae_fp16",
-            "audio_vae_fp32",
-            "latent_upscaler",
-            "turbo_lora_fl2v",
-        ],
-    },
-    "recommended_gguf": {
-        "description": "Recommended with GGUF Q4 text encoder for low RAM",
+    "entry": {
+        "description": "Tier 1: Entry & Budget (8GB - 12GB VRAM: RTX 3060, 4060, 2080Ti)",
         "items": [
             "fl2va_pruned_int8",
             "text_encoder_gguf_q4",
@@ -138,10 +133,10 @@ PRESETS = {
             "turbo_lora_fl2v",
         ],
     },
-    "full": {
-        "description": "Full BF16 precision for 24GB+ VRAM GPUs (RTX 4090 / 3090 / A100)",
+    "balanced": {
+        "description": "Tier 2: Mid-High Consumer (12GB - 16GB VRAM: RTX 5080, 4080, 4070, 3080)",
         "items": [
-            "fl2va_full_bf16",
+            "fl2va_pruned_int8",
             "text_encoder_int8",
             "video_vae_fp16",
             "audio_vae_fp32",
@@ -149,8 +144,42 @@ PRESETS = {
             "turbo_lora_fl2v",
         ],
     },
+    "recommended": {
+        "description": "Alias for 'balanced' (12GB - 16GB VRAM)",
+        "items": [
+            "fl2va_pruned_int8",
+            "text_encoder_int8",
+            "video_vae_fp16",
+            "audio_vae_fp32",
+            "latent_upscaler",
+            "turbo_lora_fl2v",
+        ],
+    },
+    "enthusiast": {
+        "description": "Tier 3: Enthusiast (24GB - 32GB VRAM: RTX 4090, 3090, 5090)",
+        "items": [
+            "fl2va_full_int8",
+            "text_encoder_int8",
+            "video_vae_fp16",
+            "audio_vae_fp32",
+            "latent_upscaler",
+            "turbo_lora_fl2v",
+        ],
+    },
+    "workstation": {
+        "description": "Tier 4: Workstation & Enterprise (48GB - 80GB+: RTX 6000 Ada, A100, H100)",
+        "items": [
+            "fl2va_full_bf16",
+            "text_encoder_bf16",
+            "video_vae_fp16",
+            "audio_vae_fp32",
+            "latent_upscaler",
+            "turbo_lora_fl2v",
+            "turbo_lora_ref2v",
+        ],
+    },
     "turbo_only": {
-        "description": "Download only Turbo LoRAs & Upscaler",
+        "description": "Download only Turbo LoRAs & Latent 3D Upscaler",
         "items": [
             "latent_upscaler",
             "turbo_lora_fl2v",
@@ -327,26 +356,27 @@ def run_downloader(preset_name: str, base_dir: Path, hf_token: str = None, dry_r
 
 
 def interactive_menu(base_dir: Path):
-    print("\n" + "=" * 60)
-    print("   MiniMax H3 - Model Download Preset Selector")
-    print("=" * 60)
-    for idx, (key, val) in enumerate(PRESETS.items(), 1):
+    print("\n" + "=" * 70)
+    print("      MiniMax H3 - Universal Hardware Preset Selector")
+    print("=" * 70)
+    preset_keys = list(PRESETS.keys())
+    for idx, key in enumerate(preset_keys, 1):
+        val = PRESETS[key]
         total_gb = sum(MODELS_CATALOG[i]["approx_gb"] for i in val["items"] if i in MODELS_CATALOG)
-        print(f" {idx}. {key.ljust(18)} (~{total_gb:4.1f} GB) - {val['description']}")
-    print(" 5. Exit")
-    print("-" * 60)
+        print(f"  {idx}. {key.upper().ljust(14)} (~{total_gb:4.1f} GB) - {val['description']}")
+    print(f"  {len(preset_keys) + 1}. EXIT")
+    print("-" * 70)
 
-    choice = input("Enter option [1-5] (Default: 1): ").strip()
-    if choice == "2":
-        return "recommended_gguf"
-    elif choice == "3":
-        return "full"
-    elif choice == "4":
-        return "turbo_only"
-    elif choice == "5":
-        sys.exit(0)
-    else:
-        return "recommended"
+    choice = input(f"Enter option [1-{len(preset_keys) + 1}] (Default: 2 - Balanced): ").strip()
+    try:
+        choice_idx = int(choice) - 1
+        if 0 <= choice_idx < len(preset_keys):
+            return preset_keys[choice_idx]
+        elif choice_idx == len(preset_keys):
+            sys.exit(0)
+    except (ValueError, IndexError):
+        pass
+    return "balanced"
 
 
 def main():
