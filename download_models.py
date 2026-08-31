@@ -75,11 +75,23 @@ MODELS_CATALOG = {
         "category": "text_encoder",
         "approx_gb": 16.5,
     },
+    "text_encoder_nvfp4": {
+        "name": "Qwen3-VL-32B Instruct (NVFP4 AWQ 4-Bit - Native for RTX 5080/5090 Blackwell)",
+        "subpath": "Qwen3-VL-32B-Instruct/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "category": "text_encoder",
+        "approx_gb": 16.0,
+    },
     "text_encoder_gguf_q4": {
-        "name": "Qwen3-VL-32B Instruct (GGUF Q4_K_M - Low RAM)",
+        "name": "Qwen3-VL-32B Instruct (GGUF Q4_K_M - Low RAM ~14GB)",
         "subpath": "Qwen3-VL-32B-Instruct/qwen3vl-32B-MiniMax-H3-Q4_K_M.gguf",
         "category": "text_encoder",
-        "approx_gb": 18.0,
+        "approx_gb": 14.0,
+    },
+    "text_encoder_gguf_q2": {
+        "name": "Qwen3-VL-32B Instruct (GGUF Q2_K - Ultra Low RAM ~8.5GB)",
+        "subpath": "Qwen3-VL-32B-Instruct/qwen3vl-32B-MiniMax-H3-Q2_K.gguf",
+        "category": "text_encoder",
+        "approx_gb": 8.5,
     },
     "video_vae_fp16": {
         "name": "MiniMax H3 Video VAE (FP16)",
@@ -107,21 +119,28 @@ MODELS_CATALOG = {
     },
     "turbo_lora_fl2v": {
         "name": "LightX2V FL2V Turbo LoRA 4-Step (768p Alpha128 - Recommended)",
-        "subpath": "loras/minimax_h3_lightx2v_fl2v_turbo_4step_alpha128_v1.0_768p_bf16.safetensors",
+        "subpath": "loras/minimax_h3/minimax_h3_lightx2v_fl2v_turbo_4step_alpha128_v1.0_768p_bf16.safetensors",
         "target_dir": "loras/minimax_h3",
         "category": "lora",
         "approx_gb": 0.1,
     },
     "turbo_lora_fl2v_8step": {
         "name": "LightX2V FL2V Turbo LoRA 8-Step (Alpha8)",
-        "subpath": "loras/minimax_h3_lightx2v_fl2v_turbo_8step_alpha8_v1.0_bf16.safetensors",
+        "subpath": "loras/minimax_h3/minimax_h3_lightx2v_fl2v_turbo_8step_alpha8_v1.0_bf16.safetensors",
         "target_dir": "loras/minimax_h3",
         "category": "lora",
         "approx_gb": 0.1,
     },
+    "turbo_lora_larry": {
+        "name": "Turbo Larry v1 EMA 4-Step (Fast Motion LoRA)",
+        "subpath": "loras/minimax_h3/minimax_h3_turbo_4step_ema_ckpt850.safetensors",
+        "target_dir": "loras/minimax_h3",
+        "category": "lora",
+        "approx_gb": 0.8,
+    },
     "turbo_lora_ref2v": {
         "name": "LightX2V Ref2V Turbo LoRA 4-Step (Alpha8)",
-        "subpath": "loras/minimax_h3_lightx2v_ref2v_turbo_4step_alpha8_v0.1_bf16.safetensors",
+        "subpath": "loras/minimax_h3/minimax_h3_lightx2v_ref2v_turbo_4step_alpha8_v0.1_bf16.safetensors",
         "target_dir": "loras/minimax_h3",
         "category": "lora",
         "approx_gb": 0.1,
@@ -138,6 +157,7 @@ PRESETS = {
             "audio_vae_fp32",
             "latent_upscaler",
             "turbo_lora_fl2v",
+            "turbo_lora_larry",
         ],
     },
     "balanced": {
@@ -149,6 +169,7 @@ PRESETS = {
             "audio_vae_fp32",
             "latent_upscaler",
             "turbo_lora_fl2v",
+            "turbo_lora_larry",
         ],
     },
     "recommended": {
@@ -160,6 +181,19 @@ PRESETS = {
             "audio_vae_fp32",
             "latent_upscaler",
             "turbo_lora_fl2v",
+            "turbo_lora_larry",
+        ],
+    },
+    "blackwell_nvfp4": {
+        "description": "Blackwell 4-Bit NVFP4 Optimized (RTX 5080, 5090)",
+        "items": [
+            "fl2va_pruned_int8",
+            "text_encoder_nvfp4",
+            "video_vae_fp16",
+            "audio_vae_fp32",
+            "latent_upscaler",
+            "turbo_lora_fl2v",
+            "turbo_lora_larry",
         ],
     },
     "enthusiast": {
@@ -171,6 +205,7 @@ PRESETS = {
             "audio_vae_fp32",
             "latent_upscaler",
             "turbo_lora_fl2v",
+            "turbo_lora_larry",
         ],
     },
     "workstation": {
@@ -182,11 +217,12 @@ PRESETS = {
             "audio_vae_fp32",
             "latent_upscaler",
             "turbo_lora_fl2v",
+            "turbo_lora_fl2v_8step",
+            "turbo_lora_larry",
             "turbo_lora_ref2v",
         ],
     },
     "turbo_only": {
-        "description": "Download only Turbo LoRAs & Latent 3D Upscaler",
         "items": [
             "latent_upscaler",
             "turbo_lora_fl2v",

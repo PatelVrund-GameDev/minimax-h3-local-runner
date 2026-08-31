@@ -265,11 +265,12 @@ python download_models.py
 ```
 
 ### Download Presets:
-* **`1. entry` (~38.0 GB)**: Pruned INT8 + GGUF Q4 Text Encoder + FP8 VAE + Turbo LoRA *(For 8GB–12GB VRAM: RTX 3060/4060)*.
-* **`2. balanced` (~39.5 GB)**: Pruned INT8 + Quanto INT8 Text Encoder + FP16 VAE + Latent Upscaler + Turbo LoRA *(For 12GB–16GB VRAM: RTX 5080/4080/4070/3080)*.
-* **`3. enthusiast` (~51.0 GB)**: Full 33B INT8 ConvRot + Quanto INT8 + FP16 VAE + Latent Upscaler + Turbo LoRA *(For 24GB–32GB VRAM: RTX 4090/3090/5090)*.
-* **`4. workstation` (~132.0 GB)**: Full 33B BF16 + Full BF16 Text Encoder + VAEs + All LoRAs *(For 48GB–80GB+ VRAM: RTX 6000 Ada, A100, H100)*.
-* **`5. turbo_only` (~0.4 GB)**: Just the Latent 3D Upscaler and LightX2V Turbo LoRAs.
+* **`1. entry` (~35.0 GB)**: Pruned INT8 + GGUF Q4 Text Encoder (~14GB) + FP8 VAE + Turbo LoRAs *(For 8GB–12GB VRAM or 16GB–32GB RAM: RTX 3060/4060)*.
+* **`2. balanced` (~39.5 GB)**: Pruned INT8 + Quanto INT8 Text Encoder + FP16 VAE + Latent Upscaler + Turbo LoRAs *(For 12GB–16GB VRAM: RTX 5080/4080/4070/3080)*.
+* **`3. blackwell_nvfp4` (~39.0 GB)**: Pruned INT8 + Native NVFP4 4-Bit Text Encoder (~16GB) + FP16 VAE + Turbo LoRAs *(Tailored for RTX 5080/5090 Blackwell architecture)*.
+* **`4. enthusiast` (~51.0 GB)**: Full 33B INT8 ConvRot + Quanto INT8 + FP16 VAE + Latent Upscaler + Turbo LoRAs *(For 24GB–32GB VRAM: RTX 4090/3090/5090)*.
+* **`5. workstation` (~133.0 GB)**: Full 33B BF16 + Full BF16 Text Encoder + VAEs + All LoRAs *(For 48GB–80GB+ VRAM: RTX 6000 Ada, A100, H100)*.
+* **`6. turbo_only` (~1.2 GB)**: All Turbo LoRAs (LightX2V 4-step & 8-step + Turbo Larry 4-step) & Latent 3D Upscaler.
 
 ---
 
