@@ -1,0 +1,53 @@
+{
+    "gpu_profile": "NVIDIA GeForce RTX 5080 / 4080 (16GB VRAM)",
+    "description": "Optimized inference settings for 720p 15s video generation within 12-16GB VRAM",
+    "recommended_settings": {
+        "model": {
+            "name": "MiniMax H3 FL2VA Pruned 20B",
+            "checkpoint": "MiniMax-H3-FL2VA-pruned_rank8_int8_convrot.safetensors",
+            "text_encoder": "Qwen3-VL-32B-Instruct/Qwen3-VL-32B-Instruct-layer50_quanto_bf16_int8.safetensors",
+            "video_vae": "MiniMax-H3-video_vae_fp16.safetensors",
+            "audio_vae": "MiniMax-H3-audio_vae_fp32.safetensors",
+            "latent_upscaler": "minimax_h3/minimax_h3_latent_upscaler_3d_bf16.safetensors"
+        },
+        "generation_parameters": {
+            "resolution": "1280x720 (720p 16:9)",
+            "fps": 24,
+            "duration_seconds": 15,
+            "total_frames": 360,
+            "inference_steps": 6,
+            "turbo_lora": {
+                "file": "minimax_h3_lightx2v_fl2v_turbo_4step_alpha16_v0.1.safetensors",
+                "multiplier": 0.6
+            },
+            "first_block_cache": {
+                "enabled": true,
+                "threshold": 0.08,
+                "skip_start_percent": 20
+            },
+            "attention_backend": "sageattention_v2",
+            "guidance_scale": 4.5,
+            "sample_solver": "euler"
+        },
+        "memory_optimizations": {
+            "offload_device": "cpu",
+            "expandable_segments": true,
+            "int8_activations": true,
+            "estimated_vram_usage_gb": 12.4
+        }
+    },
+    "fast_preview_preset_480p": {
+        "resolution": "854x480",
+        "duration_seconds": 5,
+        "inference_steps": 4,
+        "estimated_vram_usage_gb": 8.5,
+        "generation_time_rtx5080_est": "30-50 seconds"
+    },
+    "cinematic_quality_preset_720p": {
+        "resolution": "1280x720",
+        "duration_seconds": 15,
+        "inference_steps": 8,
+        "estimated_vram_usage_gb": 12.8,
+        "generation_time_rtx5080_est": "2.5-4.5 minutes"
+    }
+}

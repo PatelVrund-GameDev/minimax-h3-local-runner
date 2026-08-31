@@ -1,0 +1,62 @@
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Model Checkpoints & Large Weights (Do not commit to Git)
+*.safetensors
+*.gguf
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.onnx
+*.engine
+
+# Directory weights & caches
+wan2gp_core/ckpts/*
+!wan2gp_core/ckpts/.gitkeep
+ckpts/
+models_cache/
+hf_cache/
+torch_cache/
+tmp/
+loras/*
+!loras/.gitkeep
+wan2gp_core/loras/*
+!wan2gp_core/loras/.gitkeep
+
+# Generation Outputs
+outputs/
+wan2gp_core/outputs/
+*.mp4
+*.wav
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# IDE and OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & Configs
+*.log
+envs.json
+setup_config_local.json
