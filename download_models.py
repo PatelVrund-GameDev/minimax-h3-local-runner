@@ -106,15 +106,22 @@ MODELS_CATALOG = {
         "approx_gb": 0.2,
     },
     "turbo_lora_fl2v": {
-        "name": "LightX2V FL2V Turbo LoRA (4-Step Alpha16 - Recommended)",
-        "subpath": "minimax_h3_lightx2v_fl2v_turbo_4step_alpha16_v0.1.safetensors",
+        "name": "LightX2V FL2V Turbo LoRA 4-Step (768p Alpha128 - Recommended)",
+        "subpath": "loras/minimax_h3_lightx2v_fl2v_turbo_4step_alpha128_v1.0_768p_bf16.safetensors",
+        "target_dir": "loras/minimax_h3",
+        "category": "lora",
+        "approx_gb": 0.1,
+    },
+    "turbo_lora_fl2v_8step": {
+        "name": "LightX2V FL2V Turbo LoRA 8-Step (Alpha8)",
+        "subpath": "loras/minimax_h3_lightx2v_fl2v_turbo_8step_alpha8_v1.0_bf16.safetensors",
         "target_dir": "loras/minimax_h3",
         "category": "lora",
         "approx_gb": 0.1,
     },
     "turbo_lora_ref2v": {
-        "name": "LightX2V Ref2V Turbo LoRA (4-Step Alpha8)",
-        "subpath": "minimax_h3_lightx2v_ref2v_turbo_4step_alpha8_v0.1_bf16.safetensors",
+        "name": "LightX2V Ref2V Turbo LoRA 4-Step (Alpha8)",
+        "subpath": "loras/minimax_h3_lightx2v_ref2v_turbo_4step_alpha8_v0.1_bf16.safetensors",
         "target_dir": "loras/minimax_h3",
         "category": "lora",
         "approx_gb": 0.1,
@@ -329,10 +336,10 @@ def run_downloader(preset_name: str, base_dir: Path, hf_token: str = None, dry_r
         rel_target = item.get("target_dir")
         if rel_target:
             dest_folder = base_dir / rel_target
+            dest_file = dest_folder / Path(item["subpath"]).name
         else:
             dest_folder = base_dir / "ckpts"
-
-        dest_file = dest_folder / item["subpath"]
+            dest_file = dest_folder / item["subpath"]
         url = urljoin(HF_BASE_URL, item["subpath"].replace("\\", "/"))
 
         print(f"\n[{idx}/{len(items_to_dl)}] Downloading {item['name']}...")
